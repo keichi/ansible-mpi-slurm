@@ -3,8 +3,8 @@
   with_items:
     - rpcbind
 
-- name: Mount /home directories on nfs server
-  command: mount -t nfs {{ master_hostname }}:/home /home
+- name: Mount /home from master
+  mount: name=/home src={{ master_hostname }}:/home fstype=nfs
 
 - name: Configure fstab
   lineinfile:
