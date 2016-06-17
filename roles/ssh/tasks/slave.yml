@@ -1,0 +1,15 @@
+---
+- name: Permit hostbased authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#HostbasedAuthentication no"
+    line: "HostbasedAuthentication yes"
+    backup: yes
+  notify: restart sshd
+
+- name: Configure shosts.equiv
+  template: src=shosts.equiv.j2 dest=/etc/ssh/shosts.equiv
+
+- name: Fetch host key from master and save to ssh_known_hosts
+  shell: "ssh-keyscan -t rsa {{ master_hostname }} >> /etc/ssh/ssh_known_hosts"

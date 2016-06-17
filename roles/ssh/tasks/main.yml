@@ -1,14 +1,4 @@
 ---
-- name: Permit hostbased authentication
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    state: present
-    regexp: "^#HostbasedAuthentication no"
-    line: "HostbasedAuthentication yes"
-    backup: yes
-  notify: restart sshd
-  when: "'slave' in group_names"
-
 - name: Forbid root to access via ssh
   lineinfile:
     dest: /etc/ssh/sshd_config
@@ -17,31 +7,9 @@
     line: "PermitRootLogin no"
     backup: yes
   notify: restart sshd
+
+- include: master.yml
   when: "'master' in group_names"
 
-- name: Configure ssh_config
-  template: src=ssh_config.j2 dest=/etc/ssh/ssh_config
-
-- name: Configure shosts.equiv
-  template: src=shosts.equiv.j2 dest=/etc/ssh/shosts.equiv
-
-- name: Make sure that the host key pair exist on master
-  stat: path={{ ssh_public_key }}
-  register: host_key
-  when: "'master' in group_names"
-
-- name: Generate host key pair on master if it doesn't exist
-  command: ssh-keygen -t rsa -f {{ ssh_private_key }}
-  when:
-    - "'master' in group_names"
-    - host_key.stat.exists == False
-
-- name: Copy ssh public key to slaves
-  copy: src={{ ssh_public_key }} dest=/tmp/ssh_host_rsa_key.pub
-  register: is_copy
-  ignore_errors: yes
-
-- name: Register ssh public key in ssh_known_hosts files
-  shell: (echo -n {{ master_k }} ' '; cat /tmp/ssh_host_rsa_key.pub) >> /etc/ssh/ssh_known_hosts
-  when: is_copy|success
-
+- include: slave.yml
+  when: "'slave' in group_names"
