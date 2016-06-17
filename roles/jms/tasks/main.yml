@@ -1,0 +1,107 @@
+---
+- name: Be sure packages for GUI environment are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - "@X-Window-System"
+    - "@Desktop"
+    - "@Japanese-Support"
+
+- name: Be sure packages for SDN-enhanced JMS are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - xorg-x11-fonts-*
+    - make
+    - gcc
+    - git
+    - sudo
+    - csh
+    - unzip
+    - xmlrpc-c
+    - xmlrpc-c-devel
+    - openmotif
+    - openmotif-devel
+    - openmotif22
+    - openssl-devel
+    - openssl-static
+    - autoconf
+    - pam-devel
+    - libXpm
+    - libXpm-devel
+    - ncurses
+    - ncurses-devel
+    - texinfo
+
+- name: Configure inittab
+  lineinfile:
+    dest: /etc/inittab
+    state: present
+    regexp: "^id:[0-9]:initdefault:"
+    line: "id:5:initdefault:"
+    backup: yes
+
+- name: Upgrade installed packages
+  yum: name=* state=latest
+
+- name: Create opengridscheduler-src directory
+  file: dest={{ ogs_dst_dir }} state=directory
+
+- name: Copy jms source files to /sdnjms/opengridscheduler-src directory
+  command: cp -r {{ ogs_src_dir }}gridscheduler {{ ogs_dst_dir }}
+  args:
+    creates: "{{ ogs_dst_dir }}gridscheduler"
+
+- name: Copy build.sh to /sdnjms/opengridscheduler-src
+  command: cp {{ ogs_src_dir }}build.sh {{ ogs_dst_dir }}
+  args:
+    creates: "{{ ogs_dst_dir }}build.sh"
+
+- name: Copy cheat_ogs_build to /sdnjms/opengridscheduler-src
+  command: cp -r {{ ogs_src_dir }}cheat_ogs_build {{ ogs_dst_dir }}
+  args:
+    creates: "{{ ogs_dst_dir }}cheat_ogs_build"
+
+- name: Modify .bashrc
+  lineinfile:
+    dest: /root/.bashrc
+    state: present
+    line: "# Open Grid Scheduler"
+    backup: yes
+
+- name: Modify .bashrc
+  lineinfile:
+    dest: /root/.bashrc
+    state: present
+    line: ". /etc/profile.d/sge-build.sh"
+    backup: yes
+
+- name: Copy sge-build.sh to /etc/profile.d
+  command: cp {{ ogs_dst_dir }}cheat_ogs_build/rootfs/etc/profile.d/sge-build.sh /etc/profile.d/
+  args:
+    creates: /etc/profile.d/sge-build.sh
+
+- name: Build OGS
+  shell: . /root/.bashrc && ./build.sh gridscheduler
+  args:
+    chdir: "{{ ogs_dst_dir }}"
+
+- name: Create distinst-base directory
+  file: dest={{ ogs_dst_dir }}distinst-base/ state=directory
+
+- name: Create symbolic link for libcrypto.so.1.0.0
+  file: src=/usr/lib64/libcrypto.so.1.0.1e dest=/usr/lib64/libcrypto.so.1.0.0 state=link
+
+- name: Create symbolic link for libssl.so.1.0.0
+  file: src=/usr/lib64/libssl.so.1.0.1e dest=/usr/lib64/libssl.so.1.0.0 state=link
+
+- name: Install OGS
+  shell: . /root/.bashrc && ./scripts/distinst -v -allall -bin -libs -basedir {{ ogs_dst_dir }}distinst-base/ -vdir GE2011.11p1
+  args:
+    chdir: "{{ ogs_dst_dir }}gridscheduler/source"
+
+- name: Compile extended PQS API
+  shell: . /root/.bashrc && make clean all chdir={{ ogs_src_dir }}libepqs
+  register: make_pqs
+
+- name: Copy pqs library
+  command: cp {{ ogs_src_dir }}libepqs/libepqs.so {{ ogs_dst_dir }}distinst-base/GE2011.11p1/lib/linux-x64
+  when: make_pqs|success

@@ -1,0 +1,16 @@
+---
+
+- name: Check if NetworkManager is installed or not
+  command: rpm -q NetworkManager
+  register: network_manager_check
+  ignore_errors: yes
+
+- name: Disable NetworkManger
+  service: name=NetworkManager state=stopped enabled=no
+  when: network_manager_check.rc == 0
+
+- include: master.yml
+  when: "'master' in group_names"
+
+- include: slave.yml
+  when: "'slave' in group_names"

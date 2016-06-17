@@ -1,0 +1,13 @@
+---
+- name: Be sure that packages for nis are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - ypbind
+    - rpcbind
+    - yp-tools
+
+- include: master.yml
+  when: "'master' in group_names"
+
+- include: slave.yml
+  when: "'slave' in group_names"

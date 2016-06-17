@@ -1,0 +1,16 @@
+- name: Configure exports
+  lineinfile:
+    dest: /etc/exports
+    state: present
+    backup: yes
+    line: "{{ item }}"
+  with_items:
+    - "/home {{ nfs_network }}(rw,sync,no_root_squash,no_subtree_check)"
+    - "/sdnjms {{ nfs_network }}(rw,sync,no_root_squash,no_subtree_check)"
+
+- name: Enable some services for nfs server
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - rpcbind
+    - nfslock
+    - nfs

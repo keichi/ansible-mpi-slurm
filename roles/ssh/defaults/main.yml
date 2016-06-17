@@ -1,0 +1,56 @@
+---
+host_prefix: "milk"
+
+master_k: "milk00.exp-net.osaka-u.ac.jp"
+master_d: "milk00-d.exp-net.osaka-u.ac.jp"
+
+slaves_k:
+  [
+    milk01.exp-net.osaka-u.ac.jp,
+    milk02.exp-net.osaka-u.ac.jp,
+    milk03.exp-net.osaka-u.ac.jp,
+    milk04.exp-net.osaka-u.ac.jp,
+    milk05.exp-net.osaka-u.ac.jp,
+    milk06.exp-net.osaka-u.ac.jp,
+    milk07.exp-net.osaka-u.ac.jp,
+    milk08.exp-net.osaka-u.ac.jp,
+    milk09.exp-net.osaka-u.ac.jp,
+    milk10.exp-net.osaka-u.ac.jp,
+    milk11.exp-net.osaka-u.ac.jp,
+    milk12.exp-net.osaka-u.ac.jp,
+    milk13.exp-net.osaka-u.ac.jp,
+    milk14.exp-net.osaka-u.ac.jp,
+    milk15.exp-net.osaka-u.ac.jp,
+    milk16.exp-net.osaka-u.ac.jp,
+    milk17.exp-net.osaka-u.ac.jp,
+    milk18.exp-net.osaka-u.ac.jp,
+    milk19.exp-net.osaka-u.ac.jp,
+    milk20.exp-net.osaka-u.ac.jp
+  ]
+
+slaves_d:
+  [
+    milk01-d.exp-net.osaka-u.ac.jp,
+    milk02-d.exp-net.osaka-u.ac.jp,
+    milk03-d.exp-net.osaka-u.ac.jp,
+    milk04-d.exp-net.osaka-u.ac.jp,
+    milk05-d.exp-net.osaka-u.ac.jp,
+    milk06-d.exp-net.osaka-u.ac.jp,
+    milk07-d.exp-net.osaka-u.ac.jp,
+    milk08-d.exp-net.osaka-u.ac.jp,
+    milk09-d.exp-net.osaka-u.ac.jp,
+    milk10-d.exp-net.osaka-u.ac.jp,
+    milk11-d.exp-net.osaka-u.ac.jp,
+    milk12-d.exp-net.osaka-u.ac.jp,
+    milk13-d.exp-net.osaka-u.ac.jp,
+    milk14-d.exp-net.osaka-u.ac.jp,
+    milk15-d.exp-net.osaka-u.ac.jp,
+    milk16-d.exp-net.osaka-u.ac.jp,
+    milk17-d.exp-net.osaka-u.ac.jp,
+    milk18-d.exp-net.osaka-u.ac.jp,
+    milk19-d.exp-net.osaka-u.ac.jp,
+    milk20-d.exp-net.osaka-u.ac.jp
+  ]
+
+ssh_private_key: "/etc/ssh/ssh_host_rsa_key"
+ssh_public_key: "/etc/ssh/ssh_host_rsa_key.pub"

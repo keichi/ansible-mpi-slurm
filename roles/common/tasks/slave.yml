@@ -1,0 +1,9 @@
+- name: Install yum packages
+  action: yum name={{ item }}
+  with_items:
+    - wget
+    - git
+    - nfs-utils
+    - openmpi
+    - xmlrpc-c
+    - xmlrpc-c-client

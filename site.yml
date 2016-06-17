@@ -1,0 +1,23 @@
+---
+- hosts: master
+  user: root
+  roles:
+    - brain
+    - nmm
+    - jms
+
+- hosts: all
+  user: root
+  roles:
+    - common
+    - network
+    - selinux
+    - ntp
+    - ssh
+    - nis
+    - nfs
+
+- hosts: slave
+  remote_user: root
+  roles:
+    - ssh

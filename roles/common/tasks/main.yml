@@ -1,0 +1,7 @@
+---
+
+- include: master.yml
+  when: "'master' in group_names"
+
+- include: slave.yml
+  when: "'slave' in group_names"

@@ -1,0 +1,6 @@
+network_k: "192.168.69.0/24"
+network_d: "10.0.0.0/24"
+network_c: "192.168.122.0/24"
+nic_k: "eth0"
+nic_d: "eth1"
+nic_c: "eth4"

@@ -1,0 +1,34 @@
+---
+# Setup for Brain Module in SDN-enhanced JMS
+
+- name: Be sure packages for the brain module are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - httpd
+    - ruby
+
+- name: Configure httpd.conf
+  copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf mode=0644
+
+- name: Start httpd
+  service: name=httpd state=started enabled=yes
+
+- name: Copy brain module source to /var/www/html
+  shell: cp -r /root/SDN-JMS/src/brain/* /var/www/html/
+
+- name: Configure access authority of files under html directory
+  file: path={{ item }} owner=apache group=apache mode=0550
+  with_fileglob:
+    - /var/www/html/*
+
+- name: Configure access authority of tests directory
+  file: path=/var/www/html/tests owner=root group=root mode=0700
+
+- name: Configure access authority of tools directory
+  file: path=/var/www/html/tools owner=root group=root mode=0700
+
+- name: Allocate qnstat
+  shell: cp creates=/usr/bin/qnstat /var/www/html/tools/qnstat /usr/bin/
+
+- name: Configure access authority of qnstat
+  file: path=/usr/bin/qnstat owner=root group=root mode=0755
