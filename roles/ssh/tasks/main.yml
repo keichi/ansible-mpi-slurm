@@ -25,16 +25,16 @@
 - name: Configure shosts.equiv
   template: src=shosts.equiv.j2 dest=/etc/ssh/shosts.equiv
 
-- name: Be sure that ssh public key of the master exists
+- name: Make sure that the host key pair exist on master
   stat: path={{ ssh_public_key }}
-  register: does_exist
+  register: host_key
   when: "'master' in group_names"
 
-- name: Generate a ssh-key for hostbased authentication if it doesn't exist
+- name: Generate host key pair on master if it doesn't exist
   command: ssh-keygen -t rsa -f {{ ssh_private_key }}
   when:
     - "'master' in group_names"
-    - does_exist.stat.exists == False
+    - host_key.stat.exists == False
 
 - name: Copy ssh public key to slaves
   copy: src={{ ssh_public_key }} dest=/tmp/ssh_host_rsa_key.pub
