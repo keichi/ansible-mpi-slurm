@@ -4,13 +4,4 @@
     - rpcbind
 
 - name: Mount /home from master
-  mount: name=/home src={{ master_hostname }}:/home fstype=nfs
-
-- name: Configure fstab
-  lineinfile:
-    dest: /etc/fstab
-    state: present
-    backup: yes
-    line: "{{ item }}"
-  with_items:
-    - "{{ master_hostname }}:/home /home nfs rw,relatime,rsize=131072,wsize=131072,hard 0 0"
+  mount: name=/home src={{ master_hostname }}:/home fstype=nfs state=mounted
