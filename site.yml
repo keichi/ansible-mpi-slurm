@@ -6,3 +6,4 @@
     - ssh
     - nis
     - nfs
+  become: yes
