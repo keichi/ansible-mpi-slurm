@@ -1,5 +1,0 @@
-- name: restart network service
-  service: name=network state=started enabled=yes
-
-- name: restart iptables
-  service: name=iptables state=restarted enabled=yes

@@ -1,7 +1,0 @@
-- name: Disable firewalld
-  service: name=firewalld state=stopped enabled=no
-
-- name: Kill dhclient process if it runs
-  shell: ps -ef | grep dhclient | grep -v grep | awk '{print $2}' | xargs kill -9
-  ignore_errors: yes
-  notify: restart network service

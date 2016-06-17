@@ -1,3 +1,0 @@
- - name: Create iptables
-   template: src=iptables.master.j2 dest=/etc/sysconfig/iptables
-   notify: restart iptables
