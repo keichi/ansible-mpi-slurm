@@ -1,10 +1,22 @@
 ---
-- name: Be sure that packages for nis are installed
+- name: Install rpcbind
   yum: name={{ item }} state=installed
   with_items:
-    - ypbind
     - rpcbind
-    - yp-tools
+
+- name: Enable rpcbind
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - rpcbind
+
+- name: Configure NIS domain name
+  command: ypdomainname {{ nis_domain }}
+
+- name: Make NIS domain name permanent
+  lineinfile:
+    dest: /etc/sysconfig/network
+    state: present
+    line: "NISDOMAIN={{ nis_domain }}"
 
 - include: master.yml
   when: "'master' in group_names"

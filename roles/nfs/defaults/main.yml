@@ -1,4 +1,0 @@
-nfs_domain: "exp-net.osaka-u.ac.jp"
-nfs_server: "milk00.exp-net.osaka-u.ac.jp"
-nfs_server_ip: "192.168.69.100"
-nfs_network: "192.168.69.0/24"

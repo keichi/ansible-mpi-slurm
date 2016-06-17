@@ -1,29 +1,12 @@
-- name: Configure NIS domain name
-  command: ypdomainname {{ nis_domain }}
+- name: Make sure that packages for nis are installed
+  yum: name={{ item }} state=installed
+  with_items:
+    - ypbind
 
-- name: Modify network file for make NIS domain name permanent
-  lineinfile:
-    dest: /etc/sysconfig/network
-    state: present
-    line: "NISDOMAIN={{ nis_domain }}"
-
-- name: Enable NIS service
-  command: authconfig --enablenis --nisdomain={{ nis_domain }} --nisserver={{ nis_server }} --update
-
-- name: Configure system-auth
-  lineinfile:
-    dest: /etc/pam.d/system-auth
-    state: present
-    line: "session     optional      pam_mkhomedir.so skel=/etc/skel umask=077"
-
-- name: Configure hosts file
-  lineinfile:
-    dest: /etc/hosts
-    state: present
-    line: "{{ nis_server_ip }} {{ nis_server }} {{ nis_server_s }}"
+- name: Configure NIS
+  command: authconfig --enablenis --nisdomain={{ nis_domain }} --nisserver={{ master_hostname }} --update
 
 - name: Enable some services for NIS
   service: name={{ item }} state=started enabled=yes
   with_items:
-    - rpcbind
     - ypbind

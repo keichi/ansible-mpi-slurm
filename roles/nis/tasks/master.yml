@@ -1,58 +1,14 @@
-- name: Be sure ypserv is installed
-  yum: name=ypserv state=installed
+- name: Install NIS server
+  yum: name={{ item }} state=installed
+  with_items:
+    - ypserv
 
-- name: Configure NIS domain name
-  command: ypdomainname {{ nis_domain }}
-
-- name: Modify network file to make NIS domain name permanent
-  lineinfile:
-    dest: /etc/sysconfig/network
-    state: present
-    line: "NISDOMAIN={{ nis_domain }}"
-
-- name: Modify MERGE_PASSWD value in Makefile from true to false
-  lineinfile:
-    dest: /var/yp/Makefile
-    state: present
-    regexp: "^MERGE_PASSWD=true"
-    line: "MERGE_PASSWD=false"
-    backup: yes
-
-- name: Modify MERGE_GROUP value in Makefile from true to false
-  lineinfile:
-    dest: /var/yp/Makefile
-    state: present
-    regexp: "^MERGE_GROUP=true"
-    line: "MERGE_GROUP=false"
-    backup: yes
-
-- name: Modify NIS map in Makefile
-  lineinfile:
-    dest: /var/yp/Makefile
-    state: present
-    regexp: "^all:"
-    line: "{{ nis_map }}"
-    backup: yes
-
-- name: Configure NIS network
-  template: src=securenets.j2 dest=/var/yp/securenets
-
-- name: Configure yp.conf
-  lineinfile:
-    dest: /etc/yp.conf
-    state: present
-    line: "domain {{ nis_domain }} server {{ nis_server }}"
-
-- name: Enable some services for NIS
+- name: Enable NIS server
   service: name={{ item }} state=started enabled=yes
   with_items:
-    - rpcbind
     - ypserv
     - ypxfrd
     - yppasswdd
 
 - name: Update NIS database
   command: /usr/lib64/yp/ypinit -m
-
-- name: Enable ypbind
-  service: name=ypbind state=started enabled=yes

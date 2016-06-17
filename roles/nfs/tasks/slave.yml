@@ -1,15 +1,10 @@
-- name: Enable some services for nfs client
+- name: Enable services for nfs client
   service: name={{ item }} state=started enabled=yes
   with_items:
     - rpcbind
-    - nfs-lock
-    - nfs-mountd
 
 - name: Mount /home directories on nfs server
-  command: mount -t nfs {{ nfs_server }}:/home /home
-
-- name: Mount /sdnjms directories on nfs server
-  command: mount -t nfs {{ nfs_server }}:/sdnjms /sdnjms
+  command: mount -t nfs {{ master_hostname }}:/home /home
 
 - name: Configure fstab
   lineinfile:
@@ -18,5 +13,4 @@
     backup: yes
     line: "{{ item }}"
   with_items:
-    - "{{ nfs_server }}:/home /home nfs rw,vers=3,addr={{ nfs_server_ip }} 0 0"
-    - "{{ nfs_server }}:/sdnjms /sdnjms nfs rw,vers=3,addr={{ nfs_server_ip }} 0 0"
+    - "{{ master_hostname }}:/home /home nfs rw,relatime,rsize=131072,wsize=131072,hard 0 0"

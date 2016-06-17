@@ -1,23 +1,10 @@
 ---
 
-- name: Be sure that nfs-utils is installed
-  yum: name=nfs-utils state=installed
-
-- name: Configure idmapd.conf
-  lineinfile:
-    dest: /etc/idmapd.conf
-    state: present
-    regexp: "^#Domain.*"
-    line: "Domain = {{ nfs_domain }}"
-    backup: yes
-
-- name: Check if /sdnjms directory exists
-  stat: path=/sdnjms
-  register: does_exist
-
-- name: Create /sdnjms directory if it doesn't exist
-  command: mkdir /sdnjms
-  when: does_exist.stat.exists == False or does_exist.stat.isdir == False
+- name: Install reqired yum packages
+  action: yum name={{ item }}
+  with_items:
+    - rpcbind
+    - nfs-utils
 
 - include: master.yml
   when: "'master' in group_names"

@@ -5,12 +5,10 @@
     backup: yes
     line: "{{ item }}"
   with_items:
-    - "/home {{ nfs_network }}(rw,sync,no_root_squash,no_subtree_check)"
-    - "/sdnjms {{ nfs_network }}(rw,sync,no_root_squash,no_subtree_check)"
+    - "/home {{ management_network }}(rw)"
 
 - name: Enable some services for nfs server
   service: name={{ item }} state=started enabled=yes
   with_items:
+    - nfs-server
     - rpcbind
-    - nfslock
-    - nfs

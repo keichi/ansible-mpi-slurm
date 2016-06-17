@@ -1,6 +1,1 @@
-nis_domain: "milk-cluster.lan"
-nis_map: "all:  passwd shadow group hosts rpc services netid protocols mail \ "
-nis_network: "192.168.69.0"
-nis_server_ip: "192.168.69.100"
-nis_server: "milk00.exp-net.osaka-u.ac.jp"
-nis_server_s: "milk00"
+nis_domain: "pepsi"

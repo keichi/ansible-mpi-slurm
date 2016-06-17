@@ -1,5 +1,18 @@
 ---
 
+- name: Install yum packages
+  action: yum name={{ item }}
+  with_items:
+    - wget
+    - git
+    - vim
+
+- name: Configure hosts file
+  lineinfile:
+    dest: /etc/hosts
+    state: present
+    line: "{{ master_ip }} {{ master_hostname }} {{ master_hostname_short }}"
+
 - include: master.yml
   when: "'master' in group_names"
 
