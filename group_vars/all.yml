@@ -1,4 +1,4 @@
 master_hostname: master.pepsi
 master_hostname_short: master
-master_ip: 10.0.0.2
-management_network: 10.0.0.0/24
+master_ip: 10.0.10.2
+management_network: 10.0.10.0/24
