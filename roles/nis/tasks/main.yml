@@ -9,8 +9,16 @@
   with_items:
     - rpcbind
 
+- name: Check current NIS domain name
+  command: ypdomainname
+  register: current_nis_domain
+  changed_when: false
+  always_run: yes
+  failed_when: false
+
 - name: Configure NIS domain name
   command: ypdomainname {{ nis_domain }}
+  when: current_nis_domain.stdout != nis_domain
 
 - name: Make NIS domain name permanent
   lineinfile:

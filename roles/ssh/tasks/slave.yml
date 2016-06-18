@@ -3,7 +3,7 @@
   lineinfile:
     dest: /etc/ssh/sshd_config
     state: present
-    regexp: "^#HostbasedAuthentication no"
+    regexp: "^#?HostbasedAuthentication (yes|no)"
     line: "HostbasedAuthentication yes"
     backup: yes
   notify: restart sshd
@@ -11,5 +11,15 @@
 - name: Configure shosts.equiv
   template: src=shosts.equiv.j2 dest=/etc/ssh/shosts.equiv
 
-- name: Fetch host key from master and save to ssh_known_hosts
-  shell: "ssh-keyscan -t rsa {{ master_hostname }} >> /etc/ssh/ssh_known_hosts"
+- name: Fetch host key from master
+  command: "ssh-keyscan -t rsa {{ master_hostname }}"
+  register: master_host_key
+  changed_when: false
+  always_run: yes
+
+- name: Save host key to ssh_known_hosts
+  lineinfile:
+    dest: /etc/ssh/ssh_known_hosts
+    create: yes
+    state: present
+    line: "{{ master_host_key.stdout }}"

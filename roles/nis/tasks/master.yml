@@ -11,4 +11,4 @@
     - yppasswdd
 
 - name: Update NIS database
-  command: /usr/lib64/yp/ypinit -m
+  command: /usr/lib64/yp/ypinit -m creates="/var/yp/{{ nis_domain }}"

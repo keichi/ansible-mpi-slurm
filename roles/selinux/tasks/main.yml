@@ -3,4 +3,4 @@
   yum: name=libselinux-python state=installed
 
 - name: Disable selinux
-  selinux: state=disabled
+  selinux: policy=targeted state=permissive
