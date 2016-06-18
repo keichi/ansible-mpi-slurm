@@ -3,9 +3,7 @@
 - name: Install yum packages
   action: yum name={{ item }}
   with_items:
-    - wget
-    - git
-    - vim
+    - epel-release
 
 - name: Configure hosts file
   lineinfile:

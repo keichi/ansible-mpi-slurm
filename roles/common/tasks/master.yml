@@ -1,0 +1,14 @@
+---
+
+- name: Install yum packages
+  action: yum name={{ item }}
+  with_items:
+    - wget
+    - git
+    - vim
+    - gcc
+    - gcc-gfortran
+    - make
+    - environment-modules
+    - pdsh
+
