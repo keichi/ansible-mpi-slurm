@@ -1,25 +1,22 @@
-# SDN-enhanced JMS動作用環境構築
-## 前提環境
-スレーブノードがNAT裏にあり、sshで直接外部からは入れないような環境を想定。
+# 汎用MPIクラスタ構築用Ansible Playbook
 
-### マスターノード
-- CentOS 6.7
-- eth0: management (192.168.69.100)
-- eth1: data plane (10.0.0.100)
-- eth2: control plane (192.168.0.100)
+## 構築する環境の概要
+- CentOS 7.x
+- マスタの`/home`をNFSで共有
+- マスタのアカウントをNISで共有
+- マスタのNTPサーバをスレーブが参照
+- マスタから全スレーブへSSHホストベース認証でログインできる
+- OpenMPI
+- OpenMPIの環境変数はenvironment-modulesで設定
+- マスタにはgcc, gcc-gfortran, makeなどのコンパイルに必須のツール群
 
-### スレーブノード
-- Fedora 20
-- eth0: management (192.168.69.101~120)
-- eth1: data plane (10.0.0.101~120)
+## 事前準備
+- 全ノードにCentOS 7.xをインストール
+- 全ノードのIPアドレスとホスト名を設定
+- 全ノードへSSH公開鍵認証で入る設定
 
-## Ansibleを実行する前にしておくべきこと
-- 各ノードのIPアドレス、ホスト名の設定
-- SSH公開鍵認証でマスターから各スレーブに入る設定
-- SDN-enhanced JMS本体のコード群を/root以下に配置
-
-## インストール方法
-マスターノード上で以下を実行
-```
-./provision.sh
-```
+## 設定項目
+- master_hostname: マスタノードのホスト名 (master.pepsi)
+- master_hostname_short: マスタノードのホスト名 (master)
+- master_ip: マスタノードのIP (10.0.10.2)
+- management_network: 管理用ネットワークのサブネット (例: 10.0.10.0/24)
