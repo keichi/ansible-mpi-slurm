@@ -4,6 +4,7 @@
   action: yum name={{ item }}
   with_items:
     - epel-release
+    - vim
 
 - name: Configure hosts file
   lineinfile:

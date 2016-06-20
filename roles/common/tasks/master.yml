@@ -5,7 +5,6 @@
   with_items:
     - wget
     - git
-    - vim
     - gcc
     - gcc-gfortran
     - make
