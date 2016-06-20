@@ -8,6 +8,6 @@
     - gcc
     - gcc-gfortran
     - make
-    - environment-modules
     - pdsh
+    - openmpi-devel
 

@@ -5,12 +5,20 @@
   with_items:
     - epel-release
     - vim
+    - environment-modules
+    - openmpi
 
 - name: Configure hosts file
   lineinfile:
     dest: /etc/hosts
     state: present
     line: "{{ master_ip }} {{ master_hostname }} {{ master_hostname_short }}"
+
+- name: Load OpenMPI into environment
+  lineinfile:
+    dest: /usr/share/Modules/init/bash
+    state: present
+    line: "module load mpi"
 
 - include: master.yml
   when: "'master' in group_names"
