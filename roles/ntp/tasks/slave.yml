@@ -1,0 +1,13 @@
+- name: Disable default NTP pool servers
+  replace:
+    dest: "/etc/chrony.conf"
+    regexp: "^(server \\d+\\.centos\\.pool\\.ntp\\.org iburst)$"
+    replace: "#\\1"
+
+- name: Reference NTP server on master
+  lineinfile:
+    dest: /etc/chrony.conf
+    state: present
+    backup: yes
+    line: "server {{ master_hostname }} iburst"
+  notify: restart chronyd

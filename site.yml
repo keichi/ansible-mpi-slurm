@@ -4,6 +4,7 @@
     - common
     - selinux
     - ssh
+    - ntp
     - nis
     - nfs
   become: yes

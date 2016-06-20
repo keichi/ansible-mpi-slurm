@@ -1,0 +1,13 @@
+---
+
+- name: Install chrony
+  yum: name=chrony
+
+- include: master.yml
+  when: "'master' in group_names"
+
+- include: slave.yml
+  when: "'slave' in group_names"
+
+- name: Enable chronyd
+  service: name=chronyd state=started enabled=yes
