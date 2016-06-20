@@ -1,12 +1,8 @@
-- name: Make sure that packages for nis are installed
-  yum: name={{ item }} state=installed
-  with_items:
-    - ypbind
+- name: Install NIS client
+  yum: name=ypbind state=installed
 
 - name: Configure NIS
   command: authconfig --enablenis --nisdomain={{ nis_domain }} --nisserver={{ master_hostname }} --update
 
-- name: Enable some services for NIS
-  service: name={{ item }} state=started enabled=yes
-  with_items:
-    - ypbind
+- name: Enable NIS client service
+  service: name=ypbind state=started enabled=yes

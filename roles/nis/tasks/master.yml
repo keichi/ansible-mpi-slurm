@@ -1,7 +1,5 @@
 - name: Install NIS server
-  yum: name={{ item }} state=installed
-  with_items:
-    - ypserv
+  yum: name=ypserv state=installed
 
 - name: Enable NIS server
   service: name={{ item }} state=started enabled=yes
