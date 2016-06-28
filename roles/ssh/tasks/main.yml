@@ -1,11 +1,9 @@
 ---
-- name: Forbid root to access via ssh
+- name: Disable host key checking
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    dest: /etc/ssh/ssh_config
     state: present
-    regexp: "^#?PermitRootLogin (yes|no)"
-    line: "PermitRootLogin no"
-  notify: restart sshd
+    line: "StrictHostKeyChecking no"
 
 - include: master.yml
   when: "'master' in group_names"

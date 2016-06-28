@@ -1,10 +1,26 @@
 ---
+- name: Permit root to access via ssh
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#?PermitRootLogin (yes|no)"
+    line: "PermitRootLogin yes"
+  notify: restart sshd
+
 - name: Permit hostbased authentication
   lineinfile:
     dest: /etc/ssh/sshd_config
     state: present
     regexp: "^#?HostbasedAuthentication (yes|no)"
     line: "HostbasedAuthentication yes"
+  notify: restart sshd
+
+- name: Use rhosts file
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#?IgnoreRhosts (yes|no)"
+    line: "IgnoreRhosts no"
   notify: restart sshd
 
 - name: Configure shosts.equiv
@@ -23,3 +39,12 @@
     state: present
     line: "{{ master_host_key.stdout }}"
   notify: restart sshd
+
+- name: Create shosts file in home directory of root
+  lineinfile:
+    dest: /root/.shosts
+    line: "{{ master_hostname }} root"
+    owner: root
+    group: root
+    mode: 0600
+    create: yes

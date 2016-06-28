@@ -1,4 +1,12 @@
 ---
+- name: Forbid root to access via ssh
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#?PermitRootLogin (yes|no)"
+    line: "PermitRootLogin no"
+  notify: restart sshd
+
 - name: Enable SSH keysign
   lineinfile:
     dest: /etc/ssh/ssh_config
@@ -10,12 +18,6 @@
     dest: /etc/ssh/ssh_config
     state: present
     line: "HostbasedAuthentication yes"
-
-- name: Disable host key checking
-  lineinfile:
-    dest: /etc/ssh/ssh_config
-    state: present
-    line: "StrictHostKeyChecking no"
 
 - name: Check if host key pair exists on master
   stat: path=/etc/ssh/ssh_host_rsa_key.pub
