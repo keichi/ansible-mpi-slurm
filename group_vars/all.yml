@@ -2,3 +2,5 @@ master_hostname: pepsi00.default.domain
 master_hostname_short: pepsi00
 master_ip: 192.168.10.30
 management_network: 192.168.10.0/24
+dataplane_interface: enp3s0f0
+dataplane_gateway: 172.21.0.1

@@ -1,28 +1,28 @@
 [slave]
-pepsi01
-pepsi02
-pepsi03
-pepsi04
-pepsi05
-pepsi06
-pepsi07
-pepsi08
-pepsi09
-pepsi10
-pepsi11
-pepsi12
-pepsi13
-pepsi14
-pepsi15
-pepsi17
-pepsi18
-pepsi19
-pepsi20
-pepsi21
-pepsi22
-pepsi23
-pepsi24
-pepsi25
-pepsi26
-pepsi27
-pepsi28
+pepsi01 dataplane_ip=172.21.1.1/21
+pepsi02 dataplane_ip=172.21.1.2/21
+pepsi03 dataplane_ip=172.21.1.3/21
+pepsi04 dataplane_ip=172.21.1.4/21
+pepsi05 dataplane_ip=172.21.1.5/21
+pepsi06 dataplane_ip=172.21.1.6/21
+pepsi07 dataplane_ip=172.21.1.7/21
+pepsi08 dataplane_ip=172.21.2.1/21
+pepsi09 dataplane_ip=172.21.2.2/21
+pepsi10 dataplane_ip=172.21.2.3/21
+pepsi11 dataplane_ip=172.21.2.4/21
+pepsi12 dataplane_ip=172.21.2.5/21
+pepsi13 dataplane_ip=172.21.2.6/21
+pepsi14 dataplane_ip=172.21.2.7/21
+pepsi15 dataplane_ip=172.21.3.1/21
+pepsi17 dataplane_ip=172.21.3.3/21
+pepsi18 dataplane_ip=172.21.3.4/21
+pepsi19 dataplane_ip=172.21.3.5/21
+pepsi20 dataplane_ip=172.21.3.6/21
+pepsi21 dataplane_ip=172.21.3.7/21
+pepsi22 dataplane_ip=172.21.4.1/21
+pepsi23 dataplane_ip=172.21.4.2/21
+pepsi24 dataplane_ip=172.21.4.3/21
+pepsi25 dataplane_ip=172.21.4.4/21
+pepsi26 dataplane_ip=172.21.4.5/21
+pepsi27 dataplane_ip=172.21.4.6/21
+pepsi28 dataplane_ip=172.21.4.7/21

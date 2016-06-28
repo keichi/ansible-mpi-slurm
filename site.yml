@@ -1,10 +1,11 @@
 ---
 - hosts: all
   roles:
-    - common
-    - selinux
-    - ssh
-    - ntp
-    - nis
-    - nfs
+    # - common
+    # - selinux
+    # - ssh
+    # - ntp
+    # - nis
+    # - nfs
+    - network
   become: yes

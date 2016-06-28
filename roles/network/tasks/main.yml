@@ -1,0 +1,18 @@
+---
+- name: Install dependencies of nmcli moduel
+  yum: name=NetworkManager-glib state=installed
+
+- name: Configure dataplane network
+  nmcli:
+    conn_name: "{{ dataplane_interface }}"
+    ifname: "{{ dataplane_interface }}"
+    ip4: "{{ dataplane_ip }}"
+    gw4: "{{ dataplane_gateway }}"
+    type: ethernet
+    state: present
+
+- name: Change connection method to manual
+  shell: "nmcli c m {{ dataplane_interface }} ipv4.method manual"
+
+- name: Bring connection up
+  shell: "nmcli c u {{ dataplane_interface }}"
