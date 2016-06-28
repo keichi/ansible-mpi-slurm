@@ -5,7 +5,6 @@
     state: present
     regexp: "^#?PermitRootLogin (yes|no)"
     line: "PermitRootLogin no"
-    backup: yes
   notify: restart sshd
 
 - include: master.yml

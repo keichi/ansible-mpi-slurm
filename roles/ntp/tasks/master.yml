@@ -2,6 +2,5 @@
   lineinfile:
     dest: /etc/chrony.conf
     state: present
-    backup: yes
     line: "allow {{ management_network }}"
   notify: restart chronyd

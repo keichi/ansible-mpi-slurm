@@ -2,7 +2,6 @@
   lineinfile:
     dest: /etc/exports
     state: present
-    backup: yes
     line: "{{ item }}"
   with_items:
     - "/home {{ management_network }}(rw,no_root_squash,no_subtree_check)"

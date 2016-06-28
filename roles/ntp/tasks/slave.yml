@@ -8,6 +8,5 @@
   lineinfile:
     dest: /etc/chrony.conf
     state: present
-    backup: yes
     line: "server {{ master_hostname }} iburst"
   notify: restart chronyd

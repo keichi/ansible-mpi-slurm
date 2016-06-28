@@ -5,7 +5,6 @@
     state: present
     regexp: "^#?HostbasedAuthentication (yes|no)"
     line: "HostbasedAuthentication yes"
-    backup: yes
   notify: restart sshd
 
 - name: Configure shosts.equiv
