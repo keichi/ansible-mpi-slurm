@@ -3,5 +3,10 @@
   with_items:
     - rpcbind
 
+- name: Wait for NFS server to start
+  wait_for:
+    host: "{{ master_hostname }}"
+    port: 2049
+
 - name: Mount /home from master
   mount: name=/home src={{ master_hostname }}:/home fstype=nfs state=mounted
