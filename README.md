@@ -16,10 +16,13 @@
 - 全ノードへSSH公開鍵認証で入る設定
 
 ## 設定項目
-- `master_hostname`: マスタノードのホスト名 (master.pepsi)
-- `master_hostname_short`: マスタノードのホスト名 (master)
-- `master_ip`: マスタノードのIP (10.0.10.2)
-- `management_network`: 管理用ネットワークのサブネット (例: 10.0.10.0/24)
+
+- `group_vars/all.yml`
+    - `master_hostname`: マスタノードのホスト名 (master.pepsi)
+    - `master_hostname_short`: マスタノードのホスト名 (master)
+    - `management_network`: 管理用ネットワークのサブネット (例: 10.0.10.0/24)
+- `hosts`
+    - 各マシンのIPアドレスとホスト名を列挙する
 
 ## Vagrantfile
 Vagrant-libvirtプロバイダプラグインにより、KVM上で動作することを前提とした

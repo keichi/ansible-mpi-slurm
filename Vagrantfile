@@ -8,23 +8,23 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
 
-  config.vm.define "master", primary: true do |master|
-    master.vm.provider :libvirt do |libvirt|
-      libvirt.storage_pool_name = "images"
-      libvirt.cpus = 1
-      libvirt.memory = 1024
-    end
-    master.vm.network :private_network, :ip => "10.0.10.2"
-  end
+  slaves = []
 
-  (1..4).each do |i|
-    config.vm.define "slave#{i}" do |slave|
-      slave.vm.provider :libvirt do |libvirt|
+  File.open("hosts", "r").each_line do |line|
+    ip, _, host = line.split
+
+    if host != "master" then
+      slaves << host
+    end
+
+    config.vm.define host do |machine|
+      machine.vm.provider :libvirt do |libvirt|
         libvirt.storage_pool_name = "images"
         libvirt.cpus = 1
         libvirt.memory = 1024
+        libvirt.graphics_type = "none"
       end
-      slave.vm.network :private_network, :ip => "10.0.10.#{i+2}"
+      machine.vm.network :private_network, :ip => ip
     end
   end
 
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "site.yml"
     ansible.groups = {
       "master" => ["master"],
-      "slave" => ["slave[1:4]"]
+      "slave" => slaves
     }
   end
 

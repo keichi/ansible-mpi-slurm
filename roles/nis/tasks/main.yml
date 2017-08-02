@@ -13,7 +13,7 @@
   command: ypdomainname
   register: current_nis_domain
   changed_when: false
-  always_run: yes
+  check_mode: no
   failed_when: false
 
 - name: Configure NIS domain name
