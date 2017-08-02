@@ -35,4 +35,6 @@ Vagrant.configure("2") do |config|
       "slave" => ["slave[1:4]"]
     }
   end
+
+  config.ssh.insert_key = false
 end

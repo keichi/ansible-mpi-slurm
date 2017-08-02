@@ -1,30 +1,16 @@
 ---
-- name: Enable SSH keysign
-  lineinfile:
-    dest: /etc/ssh/ssh_config
+- name: Create ssh key pair for current user
+  user:
+    name: "{{ ansible_user }}"
+    generate_ssh_key: yes
+
+- name: Read generated public key
+  command: cat /home/{{ ansible_user }}/.ssh/id_rsa.pub
+  register: my_pubkey
+  changed_when: false
+
+- name: Add public key to authorized keys
+  authorized_key:
+    user: vagrant
     state: present
-    line: "EnableSSHKeysign yes"
-    backup: yes
-
-- name: Enable hostbased authentication
-  lineinfile:
-    dest: /etc/ssh/ssh_config
-    state: present
-    line: "HostbasedAuthentication yes"
-    backup: yes
-
-- name: Disable host key checking
-  lineinfile:
-    dest: /etc/ssh/ssh_config
-    state: present
-    line: "StrictHostKeyChecking no"
-    backup: yes
-
-- name: Check if host key pair exists on master
-  stat: path=/etc/ssh/ssh_host_rsa_key.pub
-  register: host_key
-
-- name: Generate host key pair on master if it doesn't exist
-  command: ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
-  when:
-    - host_key.stat.exists == False
+    key: "{{ my_pubkey.stdout }}"

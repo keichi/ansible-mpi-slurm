@@ -8,8 +8,12 @@
     backup: yes
   notify: restart sshd
 
+- name: Disable host key checking
+  lineinfile:
+    dest: /etc/ssh/ssh_config
+    state: present
+    line: "StrictHostKeyChecking no"
+    backup: yes
+
 - include: master.yml
   when: "'master' in group_names"
-
-- include: slave.yml
-  when: "'slave' in group_names"
