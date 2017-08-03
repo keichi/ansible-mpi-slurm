@@ -8,6 +8,9 @@
     - environment-modules
     - openmpi
 
+- name: Set hostname
+  hostname: name={{ inventory_hostname }}
+
 - name: Update hosts file
   blockinfile:
     block: "{{ lookup('file', 'hosts') }}"
