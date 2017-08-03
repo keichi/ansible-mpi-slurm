@@ -1,36 +1,59 @@
 ---
 
-- name: Install munge
-  yum: name=munge
+- name: Download slurm source code
+  get_url:
+    url: https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2
+    dest: "/home/{{ ansible_user }}/slurm-17.02.6.tar.bz2"
+    checksum: sha1:8d384075427489a4775b2a3f938405d866038c70
+  when: "'master' in group_names"
+  become: no
 
-- name: Create secret key on master
-  command: create-munge-key
+- name: Install build dependencies
+  yum: name={{ item }}
+  with_items:
+    - rpm-build
+    - readline-devel
+    - openssl-devel
+    - munge-devel
+    - pam-devel
+    - perl-ExtUtils-MakeMaker
+  when: "'master' in group_names"
+
+- name: Build slurm RPMs
+  command: "rpmbuild -tb /home/{{ ansible_user }}/slurm-17.02.6.tar.bz2"
   args:
-    creates: /etc/munge/munge.key
+    creates: "/home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/slurm-17.02.6-1.el7.centos.x86_64.rpm"
+  when: "'master' in group_names"
+  become: no
+
+- name: Install mailx
+  yum: name=mailx
+
+- name: Install RPMs
+  yum:
+    name: "/home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/{{ item }}"
+    skip_broken: yes
+  with_items:
+    - slurm-17.02.6-1.el7.centos.x86_64.rpm
+    - slurm-plugins-17.02.6-1.el7.centos.x86_64.rpm
+    - slurm-munge-17.02.6-1.el7.centos.x86_64.rpm
+    - slurm-perlapi-17.02.6-1.el7.centos.x86_64.rpm
+    - slurm-contribs-17.02.6-1.el7.centos.x86_64.rpm
+
+- name: Install slurm configuration file
+  template:
+    src: slurm.conf.j2
+    dest: /etc/slurm/slurm.conf
+
+- name: Install slurm cgroup configuration file
+  template:
+    src: cgroup.conf.j2
+    dest: /etc/slurm/cgroup.conf
+
+- name: Start slumctld
+  service: name=slurmctld state=started enabled=yes
   when: "'master' in group_names"
 
-- name: Copy secret key from /etc/munge to home directory
-  copy:
-    remote_src: true
-    src: /etc/munge/munge.key
-    dest: "/home/{{ ansible_user }}/munge.key"
-  when: "'master' in group_names"
-
-- name: Make sure secret key is synchronized
-  wait_for:
-    path: "/home/{{ ansible_user }}/munge.key"
-    state: present
+- name: start slurmd
+  service: name=slurmd state=started enabled=yes
   when: "'slave' in group_names"
-
-- name: Copy secret key from home directory to /etc/munge
-  copy:
-    remote_src: true
-    src: "/home/{{ ansible_user }}/munge.key"
-    dest: /etc/munge/munge.key
-    owner: munge
-    group: munge
-    mode: 0400
-  when: "'slave' in group_names"
-
-- name: Start munged
-  service: name=munge state=started enabled=yes

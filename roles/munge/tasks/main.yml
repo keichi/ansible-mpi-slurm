@@ -1,0 +1,36 @@
+---
+
+- name: Install munge
+  yum: name=munge
+
+- name: Create secret key on master
+  command: create-munge-key
+  args:
+    creates: /etc/munge/munge.key
+  when: "'master' in group_names"
+
+- name: Copy secret key from /etc/munge to home directory
+  copy:
+    remote_src: true
+    src: /etc/munge/munge.key
+    dest: "/home/{{ ansible_user }}/munge.key"
+  when: "'master' in group_names"
+
+- name: Make sure secret key is synchronized
+  wait_for:
+    path: "/home/{{ ansible_user }}/munge.key"
+    state: present
+  when: "'slave' in group_names"
+
+- name: Copy secret key from home directory to /etc/munge
+  copy:
+    remote_src: true
+    src: "/home/{{ ansible_user }}/munge.key"
+    dest: /etc/munge/munge.key
+    owner: munge
+    group: munge
+    mode: 0400
+  when: "'slave' in group_names"
+
+- name: Start munged
+  service: name=munge state=started enabled=yes
