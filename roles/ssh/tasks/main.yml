@@ -1,19 +1,22 @@
 ---
-- name: Forbid root to access via ssh
+- name: Forbid root login
   lineinfile:
     dest: /etc/ssh/sshd_config
-    state: present
     regexp: "^#?PermitRootLogin (yes|no)"
     line: "PermitRootLogin no"
-    backup: yes
+  notify: restart sshd
+
+- name: Disable DNS reverse lookup
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#?UseDNS (yes|no)"
+    line: "UseDNS no"
   notify: restart sshd
 
 - name: Disable host key checking
   lineinfile:
     dest: /etc/ssh/ssh_config
-    state: present
     line: "StrictHostKeyChecking no"
-    backup: yes
 
 - include: master.yml
   when: "'master' in group_names"
