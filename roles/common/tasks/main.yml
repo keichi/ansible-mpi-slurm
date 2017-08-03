@@ -21,6 +21,11 @@
     dest: /usr/share/Modules/init/bash
     line: "module load mpi"
 
+- name: Force using ob1 pml
+  lineinfile:
+    dest: /etc/openmpi-x86_64/openmpi-mca-params.conf
+    line: "pml = ob1"
+
 - include: master.yml
   when: "'master' in group_names"
 
