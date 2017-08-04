@@ -7,4 +7,6 @@
     - ntp
     - nis
     - nfs
+    - munge
+    - slurm
   become: yes

@@ -29,23 +29,28 @@
 - name: Install mailx
   yum: name=mailx
 
+- name: Check if slurm rpm is installed
+  command: rpm -q slurm-17.02.6-1.el7.centos.x86_64
+  changed_when: no
+  register: slurm_installed
+  failed_when: slurm_installed.rc not in [0, 1]
+
 - name: Install RPMs
-  yum:
-    name: "/home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/{{ item }}"
-    skip_broken: yes
+  command: "rpm --nodeps -ivh /home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/{{ item }}"
   with_items:
     - slurm-17.02.6-1.el7.centos.x86_64.rpm
     - slurm-plugins-17.02.6-1.el7.centos.x86_64.rpm
     - slurm-munge-17.02.6-1.el7.centos.x86_64.rpm
     - slurm-perlapi-17.02.6-1.el7.centos.x86_64.rpm
     - slurm-contribs-17.02.6-1.el7.centos.x86_64.rpm
+  when: slurm_installed.rc == 1
 
-- name: Install slurm configuration file
+- name: Copy slurm configuration file
   template:
     src: slurm.conf.j2
     dest: /etc/slurm/slurm.conf
 
-- name: Install slurm cgroup configuration file
+- name: Copy slurm cgroup configuration file
   template:
     src: cgroup.conf.j2
     dest: /etc/slurm/cgroup.conf
