@@ -1,3 +1,31 @@
 master_hostname: master.pepsi
-master_hostname_short: master
 management_network: 10.0.10.0/24
+hosts:
+  - name: master
+    fqdn: master.pepsi
+    ip: 10.0.10.2
+    master: true
+  - name: slave1
+    fqdn: slave1.pepsi
+    ip: 10.0.10.3
+  - name: slave2
+    fqdn: slave2.pepsi
+    ip: 10.0.10.4
+  - name: slave3
+    fqdn: slave3.pepsi
+    ip: 10.0.10.5
+  - name: slave4
+    fqdn: slave4.pepsi
+    ip: 10.0.10.6
+  - name: slave5
+    fqdn: slave5.pepsi
+    ip: 10.0.10.7
+  - name: slave6
+    fqdn: slave6.pepsi
+    ip: 10.0.10.8
+  - name: slave7
+    fqdn: slave7.pepsi
+    ip: 10.0.10.9
+  - name: slave8
+    fqdn: slave8.pepsi
+    ip: 10.0.10.10

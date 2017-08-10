@@ -5,10 +5,11 @@
 - マスタの`/home`をNFSで共有
 - マスタのアカウントをNISで共有
 - マスタのNTPサーバをスレーブが参照
-- マスタから全スレーブへSSHホストベース認証でログインできる
+- マスタから全スレーブへSSHでログインできる
 - OpenMPI
 - OpenMPIの環境変数はenvironment-modulesで設定
 - マスタにはgcc, gcc-gfortran, makeなどのコンパイルに必須のツール群
+- Slurmによるスケジューリング
 
 ## 事前準備
 - 全ノードにCentOS 7.xをインストール
@@ -18,11 +19,15 @@
 ## 設定項目
 
 - `group_vars/all.yml`
-    - `master_hostname`: マスタノードのホスト名 (master.pepsi)
-    - `master_hostname_short`: マスタノードのホスト名 (master)
+    - `master_hostname`: マスタノードのホスト名 (例: master.pepsi)
     - `management_network`: 管理用ネットワークのサブネット (例: 10.0.10.0/24)
-- `hosts`
-    - 各マシンのIPアドレスとホスト名を列挙する
+    - `hosts`: ホスト一覧
+        - `name`: ホスト名
+        - `fqdn`: FQDN
+        - `ip`: IPアドレス
+        - `master`: マスタノードの場合 `true`
+
+- `roles/slurm/templates/slurm.conf.j2`
 
 ## Vagrantfile
 Vagrant-libvirtプロバイダプラグインにより、KVM上で動作することを前提とした

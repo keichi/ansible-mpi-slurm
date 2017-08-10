@@ -12,8 +12,8 @@
   hostname: name={{ inventory_hostname }}
 
 - name: Update hosts file
-  blockinfile:
-    block: "{{ lookup('file', 'hosts') }}"
+  template:
+    src: hosts.j2
     dest: /etc/hosts
 
 - name: Load OpenMPI into environment
