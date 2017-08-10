@@ -4,14 +4,14 @@
     dest: /etc/ssh/sshd_config
     regexp: "^#?PermitRootLogin (yes|no)"
     line: "PermitRootLogin no"
-  notify: restart sshd
+  notify: Restart sshd
 
 - name: Disable DNS reverse lookup
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^#?UseDNS (yes|no)"
     line: "UseDNS no"
-  notify: restart sshd
+  notify: Restart sshd
 
 - name: Disable host key checking
   lineinfile:

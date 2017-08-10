@@ -1,0 +1,4 @@
+---
+- name: Reload slurm config
+  command: scontrol reconfigure
+  when: "'master' in group_names"

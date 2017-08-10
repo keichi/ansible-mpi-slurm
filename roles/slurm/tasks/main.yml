@@ -49,6 +49,7 @@
   template:
     src: slurm.conf.j2
     dest: /etc/slurm/slurm.conf
+  notify: Reload slurm config
 
 - name: Copy slurm cgroup configuration file
   template:
