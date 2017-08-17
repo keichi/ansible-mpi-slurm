@@ -1,55 +1,19 @@
 ---
+- name: Add yum repository for Slurm
+  yum_repository:
+    name: bintray-shimojo-lab-slurm
+    description: Shimojo Lab's Unofficial Build of Slurm
+    baseurl: https://dl.bintray.com/shimojo-lab/slurm
 
-- name: Download slurm source code
-  get_url:
-    url: https://www.schedmd.com/downloads/latest/slurm-17.02.6.tar.bz2
-    dest: "/home/{{ ansible_user }}/slurm-17.02.6.tar.bz2"
-    checksum: sha1:8d384075427489a4775b2a3f938405d866038c70
-  when: "'master' in group_names"
-  become: no
-
-- name: Install build dependencies
-  yum: name={{ item }}
+- name: Install Slurm packages
+  yum: name={{ item }} disable_gpg_check=yes
   with_items:
-    - rpm-build
-    - readline-devel
-    - openssl-devel
-    - munge-devel
-    - pam-devel
-    - perl-ExtUtils-MakeMaker
-  when: "'master' in group_names"
-
-- name: Build slurm RPMs
-  command: "rpmbuild -tb /home/{{ ansible_user }}/slurm-17.02.6.tar.bz2"
-  args:
-    creates: "/home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/slurm-17.02.6-1.el7.centos.x86_64.rpm"
-  when: "'master' in group_names"
-  become: no
-
-- name: Install mailx
-  yum: name=mailx
-
-- name: Check if slurm rpm is installed
-  command: rpm -q slurm-17.02.6-1.el7.centos.x86_64
-  changed_when: no
-  register: slurm_installed
-  failed_when: slurm_installed.rc not in [0, 1]
-
-- name: Wait until RPM is built
-  wait_for:
-    path: "/home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/slurm-17.02.6-1.el7.centos.x86_64.rpm"
-    state: present
-  when: "'slave' in group_names"
-
-- name: Install RPMs
-  command: "rpm --nodeps -ivh /home/{{ ansible_user }}/rpmbuild/RPMS/x86_64/{{ item }}"
-  with_items:
-    - slurm-17.02.6-1.el7.centos.x86_64.rpm
-    - slurm-plugins-17.02.6-1.el7.centos.x86_64.rpm
-    - slurm-munge-17.02.6-1.el7.centos.x86_64.rpm
-    - slurm-perlapi-17.02.6-1.el7.centos.x86_64.rpm
-    - slurm-contribs-17.02.6-1.el7.centos.x86_64.rpm
-  when: slurm_installed.rc == 1
+    - slurm
+    - slurm-plugins
+    - slurm-munge
+    - slurm-perlapi
+    - slurm-contribs
+    - mailx
 
 - name: Copy slurm configuration file
   template:
